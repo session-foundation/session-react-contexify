@@ -151,12 +151,13 @@ export const Item: React.FC<ItemProps> = ({
     e.stopPropagation();
 
     if (!isDisabled) {
-      !closeOnClick ? onClick(handlerParams) : dispatchUserHanlder();
+      !closeOnClick ? onClick(handlerParams) : dispatchUserHandler();
     }
   }
 
   // provide a feedback to the user that the item has been clicked before closing the menu
-  function dispatchUserHanlder() {
+  function dispatchUserHandler() {
+
     const node = itemNode.current!;
     node.focus();
     node.addEventListener(
@@ -183,7 +184,7 @@ export const Item: React.FC<ItemProps> = ({
               e.stopPropagation();
               e.preventDefault();
               handlerParams.event = e;
-              dispatchUserHanlder();
+              dispatchUserHandler();
             }
           }),
       });
@@ -194,7 +195,7 @@ export const Item: React.FC<ItemProps> = ({
     if (e.key === 'Enter' || e.key === ' ') {
       e.stopPropagation();
       handlerParams.event = e;
-      dispatchUserHanlder();
+      dispatchUserHandler();
     }
   }
 

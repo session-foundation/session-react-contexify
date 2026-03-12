@@ -1,4 +1,11 @@
-import { Children, cloneElement, ReactNode, ReactElement } from 'react';
+import {
+  Children,
+  cloneElement,
+  Fragment,
+  isValidElement,
+  ReactNode,
+  ReactElement,
+} from 'react';
 
 import { BooleanPredicate, PredicateParams, TriggerEvent } from '../types';
 
@@ -13,11 +20,18 @@ export function isStr(v: any): v is String {
 export function cloneItems(
   children: ReactNode,
   props: { triggerEvent: TriggerEvent; propsFromTrigger?: object }
-) {
+): ReactNode {
   return Children.map(
     // remove null item
     Children.toArray(children).filter(Boolean),
-    (item) => cloneElement(item as ReactElement<any>, props)
+    (item) => {
+      if (isValidElement(item) && item.type === Fragment) {
+        return cloneElement(item as ReactElement<any>, {
+          children: cloneItems((item.props as any).children, props),
+        });
+      }
+      return cloneElement(item as ReactElement<any>, props);
+    }
   );
 }
 
